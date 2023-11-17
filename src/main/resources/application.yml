@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: TelegramGptChatService
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spring_tg_gpt
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
