@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Users</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" th:href="@{/}">Telegram GPT Chat Service</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" th:href="@{/admin/menu}">Menu</a>
+        </li>
+        <li class="nav-item">
+          <form th:action="@{/logout}" method="post" id="form-logout">
+            <a class="nav-link active" style="cursor: pointer"
+               onclick="document.getElementById('form-logout').submit()">
+              Logout
+            </a>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="row col-md-10 m-3">
+    <h2>Registered Users</h2>
+  </div>
+  <div th:if="${error}">
+    <div class="alert alert-danger">
+      <span th:text="${error}"></span>
+    </div>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+    <tr>
+      <th>Username</th>
+      <th>Role</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="align-middle" th:each = "user : ${users}">
+      <td th:text = "${user.username}"></td>
+      <td th:text = "${user.role}"></td>
+      <td th:switch="${user.role.name()}">
+        <form th:action="@{/api/v1/admin/users/{userId}/role(userId=${user.id})}" th:method="patch">
+          <button class="btn btn-outline-dark w-100"
+                  th:case="'ADMIN'" type="submit" th:name="newRole" th:value="USER"
+                  th:disabled="${user.username == #authentication.principal.username or
+                                 user.username.equals('admin')}">
+            Set <b>user</b> role
+          </button>
+          <button class="btn btn-outline-dark w-100"
+                  th:case="'USER'" type="submit" th:name="newRole" th:value="ADMIN"
+                  th:disabled="${user.username == #authentication.principal.username or
+                                 user.username.equals('admin')}">
+            Set <b>admin</b> role</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

@@ -13,7 +13,7 @@ import lombok.Data;
 @Builder
 public class UserDTO implements Serializable {
 
-  Integer id;
+  Long id;
   String username;
   String password;
   Role role;

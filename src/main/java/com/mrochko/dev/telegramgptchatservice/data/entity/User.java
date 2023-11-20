@@ -22,9 +22,9 @@ import lombok.Setter;
 public class User {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "user_id", nullable = false)
-  private Integer id;
+  private Long id;
 
   @Column(name = "username", nullable = false)
   private String username;

@@ -1,5 +1,6 @@
 package com.mrochko.dev.telegramgptchatservice.config;
 
+import com.mrochko.dev.telegramgptchatservice.data.enumeration.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,8 +20,8 @@ public class WebSecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests((requests) -> requests
-            .requestMatchers("/", "/home").permitAll()
-            .anyRequest().authenticated()
+            .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
+            .anyRequest().permitAll()
         )
         .formLogin((form) -> form
             .loginPage("/login")
