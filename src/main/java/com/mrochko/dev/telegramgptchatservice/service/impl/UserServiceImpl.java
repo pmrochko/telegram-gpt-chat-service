@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<UserDTO> getAllUsers() {
+  public List<UserDTO> getAllUsersSortedById() {
     return UserMapper.INSTANCE.userListToDtoList(
         userRepository.findAll(Sort.by(USER_ID_PROPERTY)));
   }

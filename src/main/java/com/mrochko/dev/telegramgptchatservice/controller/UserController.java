@@ -25,7 +25,7 @@ public class UserController {
 
   @GetMapping
   public String getAllUsers(Model model) {
-    List<UserDTO> userDtoList = userService.getAllUsers();
+    List<UserDTO> userDtoList = userService.getAllUsersSortedById();
     model.addAttribute("users", userDtoList);
     return "admin/users";
   }

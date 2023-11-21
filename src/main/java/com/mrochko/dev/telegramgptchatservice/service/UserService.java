@@ -12,7 +12,7 @@ public interface UserService {
 
   void registerUser(UserRegisterDTO userRegisterDTO);
 
-  List<UserDTO> getAllUsers();
+  List<UserDTO> getAllUsersSortedById();
 
   void updateUserRole(Authentication auth, Long userId, String newRole);
 
