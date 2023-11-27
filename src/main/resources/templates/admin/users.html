@@ -57,14 +57,14 @@
         <form th:action="@{/api/v1/admin/users/{userId}/role(userId=${user.id})}" th:method="patch">
           <button class="btn btn-outline-dark w-100"
                   th:case="'ADMIN'" type="submit" th:name="newRole" th:value="USER"
-                  th:disabled="${user.username == #authentication.principal.username or
-                                 user.username.equals('admin')}">
+                  th:disabled="${user.username.equals(#authentication.principal.username) or
+                                 user.username.equals(@environment.getProperty('app.mainAdmin.name'))}">
             Set <b>user</b> role
           </button>
           <button class="btn btn-outline-dark w-100"
                   th:case="'USER'" type="submit" th:name="newRole" th:value="ADMIN"
-                  th:disabled="${user.username == #authentication.principal.username or
-                                 user.username.equals('admin')}">
+                  th:disabled="${user.username.equals(#authentication.principal.username) or
+                                 user.username.equals(@environment.getProperty('app.mainAdmin.name'))}">
             Set <b>admin</b> role</button>
         </form>
       </td>

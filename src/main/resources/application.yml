@@ -15,3 +15,7 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+
+app:
+  mainAdmin:
+    name: admin

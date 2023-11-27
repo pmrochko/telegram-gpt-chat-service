@@ -11,6 +11,7 @@ import com.mrochko.dev.telegramgptchatservice.repository.UserRepository;
 import com.mrochko.dev.telegramgptchatservice.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +28,12 @@ public class UserServiceImpl implements UserService {
   private final static String USERNAME_ALREADY_TAKEN_MESSAGE = "Username is already taken";
   private final static String USER_NOT_FOUND_MESSAGE = "User was not found by the specified ID";
   private final static String USER_ID_PROPERTY = "id";
-  private final static String MAIN_ADMIN_USERNAME = "admin";
+
+  /**
+   * Username of the first user in DB with ADMIN role
+   */
+  @Value("${app.mainAdmin.name}")
+  private String mainAdminName;
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
@@ -70,7 +76,7 @@ public class UserServiceImpl implements UserService {
   }
 
   private void validatePermissionToChangeRole(String authUsername, String editableUsername) {
-    if (authUsername.equals(editableUsername) || editableUsername.equals(MAIN_ADMIN_USERNAME))
+    if (authUsername.equals(editableUsername) || editableUsername.equals(mainAdminName))
       throw new UserValidationException("Forbidden to change the role of the selected user");
   }
 
