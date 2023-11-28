@@ -2,7 +2,6 @@ package com.mrochko.dev.telegramgptchatservice.config;
 
 import com.mrochko.dev.telegramgptchatservice.data.entity.User;
 import com.mrochko.dev.telegramgptchatservice.repository.UserRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,10 +19,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) {
-    Optional<User> user = userRepository.findUserByUsername(username);
-    return user.map(this::toUserDetails)
-        .filter(details -> username.equals(details.getUsername()))
+    User user = userRepository.findUserByUsername(username)
         .orElseThrow(() -> new UsernameNotFoundException("Wrong provided username"));
+    return toUserDetails(user);
   }
 
   private UserDetails toUserDetails(User user) {

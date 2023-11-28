@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <link href="../../static/css/chat_styles.css" th:href="@{/css/chat_styles.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+  </head>
+  <body>
+
+    <div>
+      <a type="button" class="btn btn-outline-secondary btn-lg m-3"
+         th:href="@{/admin/chats}">⬅️Chats</a>
+    </div>
+
+    <div class="chat_window">
+      <div class="top_menu">
+        <div class="buttons">
+          <div class="button close"></div>
+          <div class="button minimize"></div>
+          <div class="button maximize"></div>
+        </div>
+        <div class="title">Chat with <span th:text="${chatLogs.get(0).getUserFirstname()}"></span></div>
+      </div>
+      <ul class="messages">
+        <div th:each = "chatLog : ${chatLogs}">
+          <li class="message right appeared">
+            <div class="avatar"></div>
+            <div class="text_wrapper">
+              <div class="header">
+                <span th:text="${chatLog.getUserFirstname()}"></span>
+                ⏱<span th:text="${#temporals.format(chatLog.getTimestamp(), 'HH:mm dd-MM-yyyy')}"></span>
+              </div>
+              <div class="text" th:text="${chatLog.getAskMessage()}">Hello</div>
+            </div>
+          </li>
+          <li class="message left appeared">
+            <div class="avatar"></div>
+            <div class="text_wrapper">
+              <div class="header">ChatGPT</div>
+              <div class="text" th:text="${chatLog.getAnswerMessage()}">Hi, how can I help you?</div>
+            </div>
+          </li>
+        </div>
+      </ul>
+
+      <div class="bottom_wrapper clearfix">
+        <div class="message_input_wrapper"><input class="message_input"
+                                                  placeholder="Type your admin-message here.."></div>
+        <div class="send_message">
+          <div class="icon"></div>
+          <div class="text">Send</div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

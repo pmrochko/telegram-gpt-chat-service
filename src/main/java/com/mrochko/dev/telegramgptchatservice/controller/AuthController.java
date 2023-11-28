@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Pavlo Mrochko
  */
 @Controller
-@RequestMapping("/api/v1/register")
+@RequestMapping("/register")
 @RequiredArgsConstructor
 public class AuthController {
 

@@ -1,7 +1,6 @@
 package com.mrochko.dev.telegramgptchatservice.data.dto;
 
 import com.mrochko.dev.telegramgptchatservice.data.enumeration.Role;
-import java.io.Serializable;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class UserDTO implements Serializable {
+public class UserDTO {
 
   Long id;
   String username;

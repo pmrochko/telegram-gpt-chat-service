@@ -19,3 +19,18 @@ spring:
 app:
   mainAdmin:
     name: admin
+
+telegram-bot-api:
+  name: tg_gpt_chat_service_bot
+  token: ${TELEGRAM_BOT_API_KEY}
+  text:
+    model: gpt-3.5-turbo
+    temperature: 0.7
+    max-tokens: 500
+    top-p: 1
+    frequency-penalty: 0
+    presence-penalty: 0
+chat-gpt-api:
+  token: Bearer ${OPENAI_API_KEY}
+  url:
+    completions: https://api.openai.com/v1/chat/completions

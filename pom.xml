@@ -21,6 +21,8 @@
     <java.version>17</java.version>
     <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     <org.projectlombok.version>1.18.26</org.projectlombok.version>
+    <org.telegram.version>6.8.0</org.telegram.version>
+    <org.json.version>20231013</org.json.version>
   </properties>
 
   <dependencies>
@@ -53,7 +55,12 @@
     <dependency>
       <groupId>org.telegram</groupId>
       <artifactId>telegrambots</artifactId>
-      <version>6.8.0</version>
+      <version>${org.telegram.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>${org.json.version}</version>
     </dependency>
 
     <!--<dependency>

@@ -24,7 +24,7 @@ public interface UserMapper {
       @Mapping(target = "id", ignore = true),
       @Mapping(target = "role", ignore = true)
   })
-  User registerDtoToUserEntity(UserRegisterDTO UserRegisterDTO);
+  User registerDtoToUserEntity(UserRegisterDTO userRegisterDTO);
 
   UserDTO userEntityToDto(User user);
 

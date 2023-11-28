@@ -1,5 +1,6 @@
 package com.mrochko.dev.telegramgptchatservice.exceptions;
 
+import com.mrochko.dev.telegramgptchatservice.exceptions.chat.ChatNotFoundException;
 import com.mrochko.dev.telegramgptchatservice.exceptions.user.UserNotFoundException;
 import com.mrochko.dev.telegramgptchatservice.exceptions.user.UserValidationException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,16 +39,25 @@ public class GlobalExceptionHandler {
     return "redirect:" + viewPage;
   }
 
+  @ExceptionHandler(ChatNotFoundException.class)
+  public String handleChatNotFoundException(
+      RedirectAttributes attributes,
+      ChatNotFoundException ex
+  ) {
+    addErrorMessageToAttributes(attributes, ex);
+    return "redirect:/admin/chats";
+  }
+
   private void addErrorMessageToAttributes(RedirectAttributes attributes, RuntimeException ex) {
     attributes.addFlashAttribute("error", ex.getMessage());
   }
 
   private String extractUrlViewPage(HttpServletRequest request) {
     String fullUrl = request.getHeader(REFERER_URL_HEADER_NAME);
-    String baseUrl = request.getHeader(ORIGIN_URL_HEADER_NAME);
+    String hostUrl = request.getHeader(ORIGIN_URL_HEADER_NAME);
 
-    return (fullUrl.startsWith(baseUrl)) ?
-        fullUrl.substring(baseUrl.length()) : fullUrl;
+    return (fullUrl.startsWith(hostUrl)) ?
+        fullUrl.substring(hostUrl.length()) : fullUrl;
   }
 
 }
