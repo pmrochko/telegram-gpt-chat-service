@@ -45,12 +45,11 @@ public class TelegramGptChatBot extends TelegramLongPollingBot {
           "Hi, " + firstname + ", nice to meet you!" + "\n" +
           "Enter the message to send to ChatGPT";
       sendMessageToChat(chatId, startMessage);
+      saveChatLogToDB(firstname, Long.parseLong(chatId), requestText, "", AnswerType.CHATGPT);
     } else {
-      SendMessage sendMessage = new SendMessage();
-      pong(sendMessage, chatId);
-      String gptAnswer = askGpt(sendMessage, chatId, requestText);
-
-      saveChatToDBLogs(firstname, chatId, requestText, gptAnswer);
+      pong(chatId);
+      String gptAnswer = askGpt(chatId, requestText);
+      saveChatLogToDB(firstname, Long.parseLong(chatId), requestText, gptAnswer, AnswerType.CHATGPT);
     }
 
   }
@@ -66,36 +65,38 @@ public class TelegramGptChatBot extends TelegramLongPollingBot {
     }
   }
 
-  private String askGpt(SendMessage sendMessage, String chatId, String text) {
+  public void sendAdminMessage(Long chatId, String adminMessage) {
+    sendMessageToChat(String.valueOf(chatId), "[ADMINISTRATOR MESSAGE]: " + adminMessage);
+    String firstname = chatLogService.getUserFirstnameByChatId(chatId);
+    saveChatLogToDB(firstname, chatId, "", adminMessage, AnswerType.ADMIN);
+  }
+
+  private String askGpt(String chatId, String text) {
     String gptResponse = chatGptService.askChatGptText(text);
-    try {
-      sendMessage.setChatId(chatId);
-      sendMessage.setText("GPT answer: " + gptResponse);
-      execute(sendMessage);
-    } catch (TelegramApiException e) {
-      e.printStackTrace();
-    }
+    String answerMessage = "[GPT ANSWER]: " + gptResponse;
+    sendMessageToChat(chatId, answerMessage);
     return gptResponse;
   }
 
-  private void pong(SendMessage sendMessage, String chatId) {
-    sendMessage.setText("I'm sending your message to ChatGPT, please wait..");
-    try {
-      sendMessage.setChatId(chatId);
-      execute(sendMessage);
-    } catch (TelegramApiException e) {
-      e.printStackTrace();
-    }
+  private void pong(String chatId) {
+    String pongMessage = "I'm sending your message to ChatGPT, please wait..";
+    sendMessageToChat(chatId, pongMessage);
   }
 
-  private void saveChatToDBLogs(String userFirstname, String chatId, String requestText, String gptAnswer) {
+  private void saveChatLogToDB(
+      String userFirstname,
+      Long chatId,
+      String requestText,
+      String answerText,
+      AnswerType answerType
+  ) {
 
     ChatLogDTO chatLogDTO = ChatLogDTO.builder()
         .userFirstname(userFirstname)
-        .chatId(Long.parseLong(chatId))
+        .chatId(chatId)
         .askMessage(requestText)
-        .answerMessage(gptAnswer)
-        .answerType(AnswerType.CHATGPT)
+        .answerMessage(answerText)
+        .answerType(answerType)
         .timestamp(LocalDateTime.now())
         .build();
 

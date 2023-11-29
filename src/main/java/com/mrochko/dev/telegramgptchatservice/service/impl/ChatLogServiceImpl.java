@@ -52,4 +52,11 @@ public class ChatLogServiceImpl implements ChatLogService {
         chatLogRepository.findChatLogsByChatId(chatId));
   }
 
+  @Override
+  public String getUserFirstnameByChatId(Long chatId) {
+    return chatLogRepository.findFirstByChatId(chatId)
+        .orElseThrow(() -> new ChatNotFoundException(CHAT_NOT_FOUND_MESSAGE))
+        .getUserFirstname();
+  }
+
 }

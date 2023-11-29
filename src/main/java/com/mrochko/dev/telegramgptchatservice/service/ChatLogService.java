@@ -14,4 +14,7 @@ public interface ChatLogService {
   Map<Long, List<ChatLogDTO>> getAllChatLogsGroupedByChatId();
 
   List<ChatLogDTO> getChatLogsByChatId(Long chatId);
+
+  String getUserFirstnameByChatId(Long chatId);
+
 }

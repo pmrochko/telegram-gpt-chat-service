@@ -8,6 +8,7 @@
           rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
           crossorigin="anonymous">
+    <script src="../../static/js/scroll_down_chat.js" th:src="@{/js/scroll_down_chat.js}"></script>
   </head>
   <body>
 
@@ -27,33 +28,61 @@
       </div>
       <ul class="messages">
         <div th:each = "chatLog : ${chatLogs}">
-          <li class="message right appeared">
+
+          <li class="message right appeared" th:if="${!chatLog.getAskMessage().isBlank()}">
             <div class="avatar"></div>
             <div class="text_wrapper">
               <div class="header">
                 <span th:text="${chatLog.getUserFirstname()}"></span>
                 ⏱<span th:text="${#temporals.format(chatLog.getTimestamp(), 'HH:mm dd-MM-yyyy')}"></span>
               </div>
-              <div class="text" th:text="${chatLog.getAskMessage()}">Hello</div>
+              <div class="text" th:text="${chatLog.getAskMessage()}"></div>
             </div>
           </li>
-          <li class="message left appeared">
-            <div class="avatar"></div>
-            <div class="text_wrapper">
-              <div class="header">ChatGPT</div>
-              <div class="text" th:text="${chatLog.getAnswerMessage()}">Hi, how can I help you?</div>
+
+          <li class="message left appeared"
+              th:if="${!chatLog.getAnswerMessage().isBlank()}"
+              th:switch="${chatLog.getAnswerType().name()}">
+
+            <div th:case="'ADMIN'">
+              <div class="avatar admin"></div>
+              <div class="text_wrapper admin">
+                <div class="header">
+                  Administrator
+                  ⏱<span th:text="${#temporals.format(chatLog.getTimestamp(), 'HH:mm dd-MM-yyyy')}"></span>
+                </div>
+                <div class="text" th:text="${chatLog.getAnswerMessage()}"></div>
+              </div>
+
             </div>
+            <div th:case="'CHATGPT'">
+              <div class="avatar"></div>
+              <div class="text_wrapper">
+                <div class="header">ChatGPT</div>
+                <div class="text" th:text="${chatLog.getAnswerMessage()}"></div>
+              </div>
+            </div>
+
           </li>
+
         </div>
       </ul>
 
       <div class="bottom_wrapper clearfix">
-        <div class="message_input_wrapper"><input class="message_input"
-                                                  placeholder="Type your admin-message here.."></div>
-        <div class="send_message">
-          <div class="icon"></div>
-          <div class="text">Send</div>
-        </div>
+        <form method="post"
+              role="form"
+              th:action="@{/admin/chats/{id}/send-admin-message(id=${chatId})}">
+          <div class="message_input_wrapper">
+            <input class="message_input"
+                   placeholder="Type your admin-message here.."
+                   id="adminMessage"
+                   th:name="adminMessage"
+                   required="required"
+                   type="text"
+            />
+          </div>
+          <button class="send_message" type="submit" th:type="submit">Send</button>
+        </form>
       </div>
     </div>
 
