@@ -13,6 +13,6 @@ public interface ChatLogRepository extends JpaRepository<ChatLog, Long> {
 
   Optional<ChatLog> findFirstByChatId(Long chatId);
 
-  List<ChatLog> findChatLogsByChatId(Long chatId);
+  List<ChatLog> findAllByChatIdOrderByTimestampAsc(Long chatId);
 
 }

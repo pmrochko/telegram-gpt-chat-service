@@ -49,7 +49,7 @@ public class ChatLogServiceImpl implements ChatLogService {
       throw new ChatNotFoundException(CHAT_NOT_FOUND_MESSAGE);
 
     return ChatLogMapper.INSTANCE.chatLogsListToDtoList(
-        chatLogRepository.findChatLogsByChatId(chatId));
+        chatLogRepository.findAllByChatIdOrderByTimestampAsc(chatId));
   }
 
   @Override

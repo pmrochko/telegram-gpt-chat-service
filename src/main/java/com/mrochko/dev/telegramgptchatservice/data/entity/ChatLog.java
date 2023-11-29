@@ -19,7 +19,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "chats_log")
+@Table(name = "chat_logs")
 public class ChatLog {
 
   @Id

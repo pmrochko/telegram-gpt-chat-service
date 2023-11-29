@@ -2,6 +2,7 @@ package com.mrochko.dev.telegramgptchatservice.controller;
 
 import com.mrochko.dev.telegramgptchatservice.data.dto.UserRegisterDTO;
 import com.mrochko.dev.telegramgptchatservice.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +28,7 @@ public class AuthController {
   }
 
   @PostMapping
-  public String registration(@ModelAttribute("userRegisterDTO") UserRegisterDTO userRegisterDTO) {
+  public String registration(@Valid @ModelAttribute("userRegisterDTO") UserRegisterDTO userRegisterDTO) {
     userService.registerUser(userRegisterDTO);
     return "redirect:/register?success";
   }

@@ -4,6 +4,9 @@ import com.mrochko.dev.telegramgptchatservice.exceptions.chat.ChatNotFoundExcept
 import com.mrochko.dev.telegramgptchatservice.exceptions.user.UserNotFoundException;
 import com.mrochko.dev.telegramgptchatservice.exceptions.user.UserValidationException;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.stream.Collectors;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -24,7 +27,7 @@ public class GlobalExceptionHandler {
       UserValidationException ex
   ) {
     String viewPage = extractUrlViewPage(request);
-    addErrorMessageToAttributes(attributes, ex);
+    addErrorMessageToAttributes(attributes, ex.getMessage());
     return "redirect:" + viewPage;
   }
 
@@ -35,7 +38,7 @@ public class GlobalExceptionHandler {
       UserNotFoundException ex
   ) {
     String viewPage = extractUrlViewPage(request);
-    addErrorMessageToAttributes(attributes, ex);
+    addErrorMessageToAttributes(attributes, ex.getMessage());
     return "redirect:" + viewPage;
   }
 
@@ -44,12 +47,28 @@ public class GlobalExceptionHandler {
       RedirectAttributes attributes,
       ChatNotFoundException ex
   ) {
-    addErrorMessageToAttributes(attributes, ex);
+    addErrorMessageToAttributes(attributes, ex.getMessage());
     return "redirect:/admin/chats";
   }
 
-  private void addErrorMessageToAttributes(RedirectAttributes attributes, RuntimeException ex) {
-    attributes.addFlashAttribute("error", ex.getMessage());
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public String handleMethodArgumentNotValidException(
+      HttpServletRequest request,
+      RedirectAttributes attributes,
+      MethodArgumentNotValidException ex
+  ) {
+    String viewPage = extractUrlViewPage(request);
+    String joinedListOfValidationErrors = ex.getAllErrors().stream()
+        .map(DefaultMessageSourceResolvable::getDefaultMessage)
+        .collect(Collectors.joining());
+
+    addErrorMessageToAttributes(attributes, joinedListOfValidationErrors);
+
+    return "redirect:" + viewPage;
+  }
+
+  private void addErrorMessageToAttributes(RedirectAttributes attributes, String errorMessage) {
+    attributes.addFlashAttribute("error", errorMessage);
   }
 
   private String extractUrlViewPage(HttpServletRequest request) {
