@@ -1,16 +1,23 @@
 spring:
   application:
     name: telegram-gpt-chat-service
+  config:
+    import: "sm://"
   datasource:
-    url: jdbc:postgresql://localhost:5432/spring_tg_gpt
-    username: root
-    password: root
+    username: admin
+    password: ${sm://postgres-db-password}
     driver-class-name: org.postgresql.Driver
   jpa:
     database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  cloud:
+    gcp:
+      sql:
+        database-name: ${sm://cloud-db-name}
+        instance-connection-name: ${sm://cloud-db-instance-name}
+
   mvc:
     hiddenmethod:
       filter:
@@ -22,7 +29,7 @@ app:
 
 telegram-bot-api:
   name: tg_gpt_chat_service_bot
-  token: ${TELEGRAM_BOT_API_KEY}
+  token: ${sm://telegram-bot-api-key}
   text:
     model: gpt-3.5-turbo
     temperature: 0.7
@@ -31,6 +38,6 @@ telegram-bot-api:
     frequency-penalty: 0
     presence-penalty: 0
 chat-gpt-api:
-  token: Bearer ${OPENAI_API_KEY}
+  token: Bearer ${sm://chat-gpt-api-key}
   url:
     completions: https://api.openai.com/v1/chat/completions

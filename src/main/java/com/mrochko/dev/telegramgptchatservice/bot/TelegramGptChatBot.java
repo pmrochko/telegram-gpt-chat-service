@@ -36,22 +36,21 @@ public class TelegramGptChatBot extends TelegramLongPollingBot {
 
   @Override
   public void onUpdateReceived(Update update) {
-    String firstname = update.getMessage().getChat().getFirstName();
     String requestText = update.getMessage().getText();
+    String firstname = update.getMessage().getChat().getFirstName();
     String chatId = String.valueOf(update.getMessage().getChatId());
+    String answerText;
 
     if (requestText.equals("/start")) {
-      String startMessage =
+      answerText =
           "Hi, " + firstname + ", nice to meet you!" + "\n" +
           "Enter the message to send to ChatGPT";
-      sendMessageToChat(chatId, startMessage);
-      saveChatLogToDB(firstname, Long.parseLong(chatId), requestText, "", AnswerType.CHATGPT);
+      sendMessageToChat(chatId, answerText);
     } else {
       pong(chatId);
-      String gptAnswer = askGpt(chatId, requestText);
-      saveChatLogToDB(firstname, Long.parseLong(chatId), requestText, gptAnswer, AnswerType.CHATGPT);
+      answerText = askGpt(chatId, requestText);
     }
-
+    saveChatLogToDB(firstname, Long.parseLong(chatId), requestText, answerText, AnswerType.CHATGPT);
   }
 
   private void sendMessageToChat(String chatId, String textToSend) {
