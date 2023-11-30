@@ -5,6 +5,8 @@ WEB SITE: https://telegram-gpt-chat-service.lm.r.appspot.com/
 
 TELEGRAM BOT: https://t.me/tg_gpt_chat_service_bot
 
+DEMO-VIDEO: https://drive.google.com/file/d/1J0lCiJKRNhJGCwVN-zd09LNzXor0fTsU/view?usp=sharing
+
 ---
 The web interface is used for administration only.
 
