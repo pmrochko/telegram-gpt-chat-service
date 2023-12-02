@@ -1,6 +1,9 @@
 runtime: java17
 
-instance_class: F1
+instance_class: B4
+
+manual_scaling:
+  instances: 1
 
 env_variables:
   SPRING_PROFILES_ACTIVE: "gcp"
