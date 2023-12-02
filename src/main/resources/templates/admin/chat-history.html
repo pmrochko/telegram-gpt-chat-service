@@ -34,7 +34,7 @@
             <div class="text_wrapper">
               <div class="header">
                 <span th:text="${chatLog.getUserFirstname()}"></span>
-                ⏱<span th:text="${#temporals.format(chatLog.getTimestamp(), 'HH:mm dd-MM-yyyy')}"></span>
+                ⏱[GMT] <span th:text="${#temporals.format(chatLog.getTimestamp(), 'HH:mm dd-MM-yyyy')}"></span>
               </div>
               <div class="text" th:text="${chatLog.getAskMessage()}"></div>
             </div>
@@ -49,7 +49,7 @@
               <div class="text_wrapper admin">
                 <div class="header">
                   Administrator
-                  ⏱<span th:text="${#temporals.format(chatLog.getTimestamp(), 'HH:mm dd-MM-yyyy')}"></span>
+                  ⏱[GMT] <span th:text="${#temporals.format(chatLog.getTimestamp(), 'HH:mm dd-MM-yyyy')}"></span>
                 </div>
                 <div class="text" th:text="${chatLog.getAnswerMessage()}"></div>
               </div>

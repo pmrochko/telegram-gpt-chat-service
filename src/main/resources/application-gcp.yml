@@ -17,7 +17,6 @@ spring:
       sql:
         database-name: ${sm://cloud-db-name}
         instance-connection-name: ${sm://cloud-db-instance-name}
-
   mvc:
     hiddenmethod:
       filter:

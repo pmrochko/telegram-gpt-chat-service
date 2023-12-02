@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Chat;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -36,21 +38,38 @@ public class TelegramGptChatBot extends TelegramLongPollingBot {
 
   @Override
   public void onUpdateReceived(Update update) {
-    String requestText = update.getMessage().getText();
-    String firstname = update.getMessage().getChat().getFirstName();
-    String chatId = String.valueOf(update.getMessage().getChatId());
+    if (!isValidUpdate(update)) return;
+
+    Message message = update.getMessage();
+    Chat chatInfo = message.getChat();
+
+    String requestText = message.getText();
+
+    String firstname = chatInfo.getFirstName();
+    String name = !firstname.isBlank() ? firstname : chatInfo.getUserName();
+
+    String chatId = message.getChatId().toString();
     String answerText;
 
     if (requestText.equals("/start")) {
-      answerText =
-          "Hi, " + firstname + ", nice to meet you!" + "\n" +
-          "Enter the message to send to ChatGPT";
+      answerText = "Hi, " + name + ", nice to meet you!" + "\n" +
+                   "Enter the message to send to ChatGPT";
+      sendMessageToChat(chatId, answerText);
+    } else if (requestText.startsWith("/")) {
+      answerText = "Sorry, I don't know any command yet. " + "\n" +
+                   "Try enter the message";
       sendMessageToChat(chatId, answerText);
     } else {
       pong(chatId);
       answerText = askGpt(chatId, requestText);
     }
-    saveChatLogToDB(firstname, Long.parseLong(chatId), requestText, answerText, AnswerType.CHATGPT);
+
+    saveChatLogToDB(name, Long.parseLong(chatId), requestText, answerText, AnswerType.CHATGPT);
+  }
+
+  private boolean isValidUpdate(Update update) {
+    return (update.hasMessage() &&
+            update.getMessage().hasText());
   }
 
   private void sendMessageToChat(String chatId, String textToSend) {
@@ -65,14 +84,14 @@ public class TelegramGptChatBot extends TelegramLongPollingBot {
   }
 
   public void sendAdminMessage(Long chatId, String adminMessage) {
-    sendMessageToChat(String.valueOf(chatId), "[ADMINISTRATOR MESSAGE]: " + adminMessage);
+    sendMessageToChat(chatId.toString(), "[ADMINISTRATOR MESSAGE] \n" + adminMessage);
     String firstname = chatLogService.getUserFirstnameByChatId(chatId);
     saveChatLogToDB(firstname, chatId, "", adminMessage, AnswerType.ADMIN);
   }
 
   private String askGpt(String chatId, String text) {
     String gptResponse = chatGptService.askChatGptText(text);
-    String answerMessage = "[GPT ANSWER]: " + gptResponse;
+    String answerMessage = "[GPT ANSWER] \n" + gptResponse;
     sendMessageToChat(chatId, answerMessage);
     return gptResponse;
   }
