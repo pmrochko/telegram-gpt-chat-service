@@ -1,9 +1,9 @@
 # telegram-gpt-chat-service
 Spring Boot web-application with integration Telegram Bot API and ChatGPT API
 
-WEB SITE: https://telegram-gpt-chat-service.lm.r.appspot.com/
+WEB SITE: https://telegram-gpt-chat-service.lm.r.appspot.com/ (currently not working)
 
-TELEGRAM BOT: https://t.me/tg_gpt_chat_service_bot
+TELEGRAM BOT: https://t.me/tg_gpt_chat_service_bot (currently not working)
 
 DEMO-VIDEO: https://drive.google.com/file/d/1J0lCiJKRNhJGCwVN-zd09LNzXor0fTsU/view?usp=sharing
 
